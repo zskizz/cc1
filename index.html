@@ -1,167 +1,169 @@
-            <!DOCTYPE html>
-            <html lang="es">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Editar Teachercoins</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        background-color: #f9f9f9;
-                        color: #333;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 100vh;
-                        margin: 0;
-                    }
-                    .container {
-                        background-color: #fff;
-                        border-radius: 8px;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                        padding: 20px;
-                        max-width: 600px;
-                        width: 100%;
-                    }
-                    h1 {
-                        color: #007BFF;
-                        text-align: center;
-                        margin-bottom: 20px;
-                    }
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-bottom: 20px;
-                    }
-                    th, td {
-                        padding: 10px;
-                        text-align: left;
-                        border-bottom: 1px solid #dee2e6;
-                    }
-                    input[type="text"], input[type="number"] {
-                        width: 100%;
-                        padding: 8px;
-                        margin: 4px 0;
-                        box-sizing: border-box;
-                    }
-                    button {
-                        padding: 10px 15px;
-                        background-color: #007BFF;
-                        color: #fff;
-                        border: none;
-                        border-radius: 4px;
-                        cursor: pointer;
-                    }
-                    button:hover {
-                        background-color: #0056b3;
-                    }
-                    .actions button {
-                        margin-right: 5px;
-                    }
-                    .form-container {
-                        margin-bottom: 20px;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h1>Editar Teachercoins</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Teachercoins</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            color: #007BFF;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .actions button {
+            margin-right: 5px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Teachercoins</h1>
+        
+        <div class="form-container">
+            <h2>Agregar Nuevo Registro</h2>
+            <form id="add-form">
+                <input type="text" id="new-name" placeholder="Nombre" required>
+                <input type="number" id="new-number" placeholder="Número" required>
+                <button type="submit">Agregar</button>
+            </form>
+        </div>
 
-                    <div class="form-container">
-                        <h2>Agregar Nuevo Registro</h2>
-                        <form id="add-form">
-                            <input type="text" id="new-name" placeholder="Nombre" required>
-                            <input type="number" id="new-number" placeholder="Número" required>
-                            <button type="submit">Agregar</button>
-                        </form>
-                    </div>
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Número</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="data-body"></tbody>
+        </table>
+    </div>
 
-                    <table id="data-table">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Número</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="data-body"></tbody>
-                    </table>
-                </div>
+    <script>
+        const apiUrl = 'https://tu-backend-url.com'; // Cambia esta URL por la de tu backend
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        fetch('/data')
-                            .then(response => response.json())
-                            .then(data => {
-                                const tableBody = document.getElementById('data-body');
-                                data.forEach(person => {
-                                    const row = document.createElement('tr');
-                                    row.dataset.id = person._id;
-                                    row.innerHTML = `
-                                        <td><input type="text" id="name-${person._id}" value="${person.name}"></td>
-                                        <td><input type="number" id="number-${person._id}" value="${person.number}"></td>
-                                        <td class="actions">
-                                            <button onclick="update('${person._id}')">Actualizar</button>
-                                            <button onclick="deletePerson('${person._id}')">Eliminar</button>
-                                        </td>
-                                    `;
-                                    tableBody.appendChild(row);
-                                });
-                            });
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch(`${apiUrl}/data`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('data-body');
+                    data.forEach(person => {
+                        const row = document.createElement('tr');
+                        row.dataset.id = person._id;
+                        row.innerHTML = `
+                            <td><input type="text" id="name-${person._id}" value="${person.name}"></td>
+                            <td><input type="number" id="number-${person._id}" value="${person.number}"></td>
+                            <td class="actions">
+                                <button onclick="update('${person._id}')">Actualizar</button>
+                                <button onclick="deletePerson('${person._id}')">Eliminar</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
                     });
+                });
+        });
 
-                    document.getElementById('add-form').addEventListener('submit', function(event) {
-                        event.preventDefault();
-                        const name = document.getElementById('new-name').value;
-                        const number = document.getElementById('new-number').value;
-                        fetch('/data', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ name, number })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            alert('Nuevo registro agregado');
-                            location.reload(); // Recargar la página para actualizar la tabla
-                        })
-                        .catch(error => {
-                            alert('Error al agregar el registro');
-                        });
-                    });
+        document.getElementById('add-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('new-name').value;
+            const number = document.getElementById('new-number').value;
+            fetch(`${apiUrl}/data`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, number })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Nuevo registro agregado');
+                location.reload(); // Recargar la página para actualizar la tabla
+            })
+            .catch(error => {
+                alert('Error al agregar el registro');
+            });
+        });
 
-                    function update(id) {
-                        const name = document.getElementById(`name-${id}`).value;
-                        const number = document.getElementById(`number-${id}`).value;
-                        fetch(`/data/${id}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ name, number })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            alert('Registro actualizado');
-                        })
-                        .catch(error => {
-                            alert('Error al actualizar el registro');
-                        });
-                    }
+        function update(id) {
+            const name = document.getElementById(`name-${id}`).value;
+            const number = document.getElementById(`number-${id}`).value;
+            fetch(`${apiUrl}/data/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, number })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Registro actualizado');
+            })
+            .catch(error => {
+                alert('Error al actualizar el registro');
+            });
+        }
 
-                    function deletePerson(id) {
-                        fetch(`/data/${id}`, {
-                            method: 'DELETE'
-                        })
-                        .then(() => {
-                            alert('Registro eliminado');
-                            document.querySelector(`tr[data-id="${id}"]`).remove();
-                        })
-                        .catch(error => {
-                            alert('Error al eliminar el registro');
-                        });
-                    }
-                </script>
-            </body>
-            </html>
+        function deletePerson(id) {
+            fetch(`${apiUrl}/data/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => {
+                alert('Registro eliminado');
+                document.querySelector(`tr[data-id="${id}"]`).remove();
+            })
+            .catch(error => {
+                alert('Error al eliminar el registro');
+            });
+        }
+    </script>
+</body>
+</html>
